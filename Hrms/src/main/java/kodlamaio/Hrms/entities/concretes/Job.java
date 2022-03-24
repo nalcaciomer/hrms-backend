@@ -7,11 +7,15 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Data
 @Entity
 @Table(name = "jobs")
+@AllArgsConstructor
+@NoArgsConstructor
 public class Job {
 	@Id
 	@Column(name = "id")
@@ -21,12 +25,4 @@ public class Job {
 	@Column(name = "name")
 	private String name;
 	
-	public Job() {
-		
-	}
-
-	public Job(int id, String name) {
-		this.id = id;
-		this.name = name;
-	}
 }
