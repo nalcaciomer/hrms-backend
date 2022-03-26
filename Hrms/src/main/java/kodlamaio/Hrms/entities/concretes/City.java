@@ -18,20 +18,20 @@ import lombok.NoArgsConstructor;
 
 @Data
 @Entity
-@Table(name = "jobs")
+@Table(name = "cities")
 @AllArgsConstructor
 @NoArgsConstructor
 @JsonIgnoreProperties({"hibernateLazyInitializer","handler","jobAdvertisements"})
-public class Job {
-	
+public class City {
 	@Id
-	@Column(name = "id")
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column(name = "id")
 	private int id;
 	
 	@Column(name = "name")
 	private String name;
-	
-	@OneToMany(mappedBy = "job")
+
+	@OneToMany(mappedBy = "city")
 	private List<JobAdvertisement> jobAdvertisements;
+	
 }
