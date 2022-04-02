@@ -1,6 +1,7 @@
 package kodlamaio.Hrms.entities.concretes;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -9,8 +10,11 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
+
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -21,6 +25,7 @@ import lombok.NoArgsConstructor;
 @Table(name = "candidate_cvs")
 @AllArgsConstructor
 @NoArgsConstructor
+@JsonIgnoreProperties({"hibernateLazyInitializer","handler","candidateCvEducations"})
 public class CandidateCv {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -37,4 +42,6 @@ public class CandidateCv {
 	@JoinColumn(name = "candidate_id", referencedColumnName = "user_id")
 	private Candidate candidate;
 
+	@OneToMany(mappedBy = "candidateCv")
+	private List<CandidateCvEducation> candidateCvEducations;
 }
