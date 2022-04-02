@@ -37,18 +37,18 @@ public class CandidateCvEducationsController {
 	}
 	
 	@PostMapping(value = "/add")
-	public Result add(@RequestBody CandidateCvEducation candidateCv) {
-		return this.candidateCvEducationService.add(candidateCv);
+	public Result add(@RequestBody CandidateCvEducation candidateCvEducation) {
+		return this.candidateCvEducationService.add(candidateCvEducation);
 	}
 	
 	@PostMapping(value = "/update")
-	public Result update(@RequestBody CandidateCvEducation candidateCv) {
-		return this.candidateCvEducationService.update(candidateCv);
+	public Result update(@RequestBody CandidateCvEducation candidateCvEducation) {
+		return this.candidateCvEducationService.update(candidateCvEducation);
 	}
 	
 	@PostMapping(value = "/delete")
-	public Result delete(@RequestBody CandidateCvEducation candidateCv) {
-		return this.candidateCvEducationService.delete(candidateCv);
+	public Result delete(@RequestBody CandidateCvEducation candidateCvEducation) {
+		return this.candidateCvEducationService.delete(candidateCvEducation);
 	}
 	
 	@GetMapping(value = "/getbycandidatecvid")
