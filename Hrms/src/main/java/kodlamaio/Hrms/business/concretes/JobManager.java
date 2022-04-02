@@ -29,11 +29,21 @@ public class JobManager implements JobService {
 	public DataResult<List<Job>> getAll() {
 		return new SuccessDataResult<List<Job>>(this.jobDao.findAll(), "Jobs listed");
 	}
+	
+	@Override
+	public DataResult<Job> getById(int id) {
+		return new SuccessDataResult<Job>(this.jobDao.getById(id), "Job listed");
+	}
+
+	@Override
+	public DataResult<Job> getByName(String name) {
+		return new SuccessDataResult<Job>(this.jobDao.getByName(name), "Job listed");
+	}
 
 	@Override
 	public Result add(Job job) {
 
-		final Result result = BusinessRules.run(isJobExists(job));
+		final Result result = BusinessRules.run(isExistsByName(job.getName()));
 		
 		if(!result.isSuccess()) {
 			return result;
@@ -43,9 +53,42 @@ public class JobManager implements JobService {
 		return new SuccessResult("Job added");
 	}
 
-	public Result isJobExists(Job job) {
-		return this.jobDao.findByName(job.getName()).isEmpty() ? new SuccessResult()
-				: new ErrorResult("The job exists");
+	@Override
+	public Result update(Job job) {
+		final Result result = BusinessRules.run(isExistsById(job.getId()), isExistsByName(job.getName()));
+		
+		if(!result.isSuccess()) {
+			return result;
+		}
+
+		this.jobDao.save(job);
+		return new SuccessResult("Job updated");
+	}
+
+	@Override
+	public Result delete(Job job) {
+		this.jobDao.deleteById(job.getId());
+		return new SuccessResult("Job deleted");
+	}
+
+	@Override
+	public DataResult<List<Job>> getAllByNameAsc() {
+		return new SuccessDataResult<List<Job>>(this.jobDao.getAllByOrderByNameAsc());
+	}
+
+	@Override
+	public DataResult<List<Job>> getAllByNameDesc() {
+		return new SuccessDataResult<List<Job>>(this.jobDao.getAllByOrderByNameDesc());
+	}
+	
+	private Result isExistsByName(String name) {
+		return this.jobDao.existsJobByName(name) ? new ErrorResult("The job already exists")
+				: new SuccessResult();
+	}
+	
+	private Result isExistsById(int id) {
+		return this.jobDao.existsById(id) ? new SuccessResult()
+				: new ErrorResult("The job not exists") ;
 	}
 
 }

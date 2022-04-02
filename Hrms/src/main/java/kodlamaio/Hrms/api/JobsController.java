@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import kodlamaio.Hrms.business.abstracts.JobService;
@@ -30,9 +31,39 @@ public class JobsController {
 		return this.jobService.getAll();
 	}
 	
+	@GetMapping(value = "/getbyid")
+	public DataResult<Job> getById(@RequestParam int id){
+		return this.jobService.getById(id);
+	}
+	
+	@GetMapping(value = "/getbyname")
+	public DataResult<Job> getByName(@RequestParam String name){
+		return this.jobService.getByName(name);
+	}
+	
 	@PostMapping(value = "/add")
 	public Result add(@RequestBody Job job) {
 		return this.jobService.add(job);
+	}
+	
+	@PostMapping(value = "/update")
+	public Result update(@RequestBody Job job) {
+		return this.jobService.update(job);
+	}
+	
+	@PostMapping(value = "/delete")
+	public Result delete(@RequestBody Job job) {
+		return this.jobService.delete(job);
+	}
+	
+	@GetMapping(value = "/getallbynameasc")
+	public DataResult<List<Job>> getAllByNameAsc(){
+		return this.jobService.getAllByNameAsc();
+	}
+	
+	@GetMapping(value = "/getallbynamedesc")
+	public DataResult<List<Job>> getAllByNameDesc(){
+		return this.jobService.getAllByNameDesc();
 	}
 	
 }

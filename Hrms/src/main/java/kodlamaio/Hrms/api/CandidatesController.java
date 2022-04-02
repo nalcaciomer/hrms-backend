@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import kodlamaio.Hrms.business.abstracts.CandidateService;
@@ -34,4 +35,30 @@ public class CandidatesController {
 	public Result add(@RequestBody Candidate candidate) {
 		return this.candidateService.add(candidate);
 	}
+	
+	@PostMapping(value = "/update")
+	public Result update(@RequestBody Candidate candidate) {
+		return this.candidateService.update(candidate);
+	}
+	
+	@PostMapping(value = "/delete")
+	public Result delete(@RequestBody Candidate candidate) {
+		return this.candidateService.delete(candidate);
+	}
+	
+	@GetMapping(value = "/getbyid")
+	public DataResult<Candidate> getById(int id){
+		return this.candidateService.getById(id);
+	}
+	
+	@GetMapping(value = "/getbynationalidentity")
+	public DataResult<Candidate> getByNationalIdentity(@RequestParam String nationalIdentity){
+		return this.candidateService.getByNationalIdentity(nationalIdentity);
+	}
+	
+	@GetMapping(value = "/getbyemail")
+	public DataResult<Candidate> getByEmail(@RequestParam String email){
+		return this.candidateService.getByEmail(email);
+	}
+	
 }

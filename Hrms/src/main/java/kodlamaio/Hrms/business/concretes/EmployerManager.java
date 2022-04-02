@@ -38,10 +38,17 @@ public class EmployerManager implements EmployerService {
 	}
 
 	@Override
+	public DataResult<Employer> getById(int id) {
+		return new SuccessDataResult<Employer>(this.employerDao.findById(id).get());
+	}
+
+	@Override
 	public Result add(Employer employer) {
 
 		final Result result = BusinessRules.run(this.emailVerificationService.verify(employer.getEmail()),
-				this.employeeVerificationService.verifyEmployer(employer), isEmailExists(employer));
+				this.employeeVerificationService.verifyEmployer(employer), isEmailExists(employer.getEmail()),
+				isCompanyNameExists(employer.getCompanyName()), isWebsiteExists(employer.getWebsite()),
+				isPhoneNumberExists(employer.getPhoneNumber()));
 
 		if (!result.isSuccess()) {
 			return result;
@@ -51,9 +58,61 @@ public class EmployerManager implements EmployerService {
 		return new SuccessResult("Employer added");
 	}
 
-	public Result isEmailExists(Employer employer) {
-		return this.employerDao.findByEmail(employer.getEmail()).isEmpty() ? new SuccessResult()
-				: new ErrorResult("Email is exists!");
+	@Override
+	public Result update(Employer employer) {
+		final Result result = BusinessRules.run(isIdExists(employer.getId()));
+
+		if (!result.isSuccess()) {
+			return result;
+		}
+
+		this.employerDao.save(employer);
+		return new SuccessResult("Employer updated");
+	}
+
+	@Override
+	public Result delete(Employer employer) {
+		this.employerDao.delete(employer);
+		return new SuccessResult("Employer deleted");
+	}
+
+	@Override
+	public DataResult<Employer> getByEmail(String email) {
+		return new SuccessDataResult<Employer>(this.employerDao.getByEmail(email));
+	}
+
+	@Override
+	public DataResult<Employer> getByCompanyName(String companyName) {
+		return new SuccessDataResult<Employer>(this.employerDao.getByCompanyName(companyName));
+	}
+
+	@Override
+	public DataResult<Employer> getByWebsite(String website) {
+		return new SuccessDataResult<Employer>(this.employerDao.getByWebsite(website));
+	}
+
+	private Result isEmailExists(String email) {
+		return this.employerDao.existsEmployerByEmail(email) ? new ErrorResult("Email is exists!")
+				: new SuccessResult();
+	}
+
+	private Result isWebsiteExists(String website) {
+		return this.employerDao.existsEmployerByWebsite(website) ? new ErrorResult("Website is exists!")
+				: new SuccessResult();
+	}
+
+	private Result isCompanyNameExists(String companyName) {
+		return this.employerDao.existsEmployerByCompanyName(companyName) ? new ErrorResult("Company name is exists!")
+				: new SuccessResult();
+	}
+
+	private Result isPhoneNumberExists(String phoneNumber) {
+		return this.employerDao.existsEmployerByPhoneNumber(phoneNumber) ? new ErrorResult("Phone number is exists!")
+				: new SuccessResult();
+	}
+
+	private Result isIdExists(int id) {
+		return this.employerDao.existsById(id) ? new SuccessResult() : new ErrorResult("The employer not exists");
 	}
 
 }

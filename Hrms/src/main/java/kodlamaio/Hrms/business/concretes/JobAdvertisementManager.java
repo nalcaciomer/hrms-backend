@@ -7,7 +7,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import kodlamaio.Hrms.business.abstracts.JobAdvertisementService;
+import kodlamaio.Hrms.core.utilities.business.BusinessRules;
 import kodlamaio.Hrms.core.utilities.results.DataResult;
+import kodlamaio.Hrms.core.utilities.results.ErrorResult;
 import kodlamaio.Hrms.core.utilities.results.Result;
 import kodlamaio.Hrms.core.utilities.results.SuccessDataResult;
 import kodlamaio.Hrms.core.utilities.results.SuccessResult;
@@ -43,14 +45,21 @@ public class JobAdvertisementManager implements JobAdvertisementService{
 
 	@Override
 	public Result update(JobAdvertisement jobAdvertisement) {
-		// TODO Auto-generated method stub
-		return null;
+		final Result result = BusinessRules.run(isExistsById(jobAdvertisement.getId()));
+		
+		if(!result.isSuccess()) {
+			return result;
+		}
+		this.jobAdvertisementDao.save(jobAdvertisement);
+		
+		return new SuccessResult("Job advertisement updated");
 	}
 
 	@Override
 	public Result delete(JobAdvertisement jobAdvertisement) {
-		// TODO Auto-generated method stub
-		return null;
+		this.jobAdvertisementDao.delete(jobAdvertisement);
+		
+		return new SuccessResult("Job advertisement deleted");
 	}
 
 	@Override
@@ -75,4 +84,8 @@ public class JobAdvertisementManager implements JobAdvertisementService{
 		return new SuccessResult("The job advertisement deactivated");
 	}
 
+	private Result isExistsById(int id) {
+		return this.jobAdvertisementDao.existsById(id) ? new SuccessResult()
+				: new ErrorResult("The advertisement not exists") ;
+	}
 }

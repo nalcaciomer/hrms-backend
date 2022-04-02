@@ -35,7 +35,12 @@ public class CandidateManager implements CandidateService {
 
 	@Override
 	public DataResult<List<Candidate>> getAll() {
-		return new SuccessDataResult<List<Candidate>>(this.candidateDao.findAll(), "Candidates listed");
+		 return new SuccessDataResult<List<Candidate>>(this.candidateDao.findAll(), "Candidates listed");
+	}
+	
+	@Override
+	public DataResult<Candidate> getById(int id) {
+		return new SuccessDataResult<Candidate>(this.candidateDao.findById(id).get());
 	}
 
 	@Override
@@ -44,8 +49,8 @@ public class CandidateManager implements CandidateService {
 				this.mernisCheckService.checkIfRealPerson(new PersonForMernisCheckService(
 						Long.parseLong(candidate.getNationalIdentity()), candidate.getFirstName(),
 						candidate.getLastName(), candidate.getDateOfBirth().getYear())),
-				isEmailExists(candidate), 
-				isNationalIdentityExists(candidate), 
+				isEmailExists(candidate.getEmail()), 
+				isNationalIdentityExists(candidate.getNationalIdentity()), 
 				this.emailVerificationService.verify(candidate.getEmail()));
 
 		if (!result.isSuccess()) {
@@ -55,14 +60,48 @@ public class CandidateManager implements CandidateService {
 		this.candidateDao.save(candidate);
 		return new SuccessResult("Candidate added");
 	}
+	
+	@Override
+	public Result update(Candidate candidate) {
+		final Result result = BusinessRules.run(isExistsById(candidate.getId()));
+		
+		if(!result.isSuccess()) {
+			return result;
+		}
 
-	public Result isNationalIdentityExists(Candidate candidate) {
-		return this.candidateDao.findByNationalIdentity(candidate.getNationalIdentity()).isEmpty() ? new SuccessResult()
-				: new ErrorResult("National identity is exists!");
+		this.candidateDao.save(candidate);
+		return new SuccessResult("Candidate updated");
 	}
 
-	public Result isEmailExists(Candidate candidate) {
-		return this.candidateDao.findByEmail(candidate.getEmail()).isEmpty() ? new SuccessResult()
-				: new ErrorResult("Email is exists!");
+	@Override
+	public Result delete(Candidate candidate) {
+		this.candidateDao.delete(candidate);
+		return new SuccessResult("Candidate deleted");
 	}
+
+	@Override
+	public DataResult<Candidate> getByNationalIdentity(String nationalIdentity) {
+		return new SuccessDataResult<Candidate>(this.candidateDao.getByNationalIdentity(nationalIdentity));
+	}
+
+	@Override
+	public DataResult<Candidate> getByEmail(String email) {
+		return new SuccessDataResult<Candidate>(this.candidateDao.getByEmail(email));
+	}
+
+	private Result isNationalIdentityExists(String nationalIdentity) {
+		return this.candidateDao.existsCandidateByNationalIdentity(nationalIdentity) ? new ErrorResult("National identity is exists!")
+				: new SuccessResult();
+	}
+
+	private Result isEmailExists(String email) {
+		return this.candidateDao.existsCandidateByEmail(email) ? new ErrorResult("Email is exists!")
+				: new SuccessResult();
+	}
+	
+	private Result isExistsById(int id) {
+		return this.candidateDao.existsById(id) ? new SuccessResult()
+				: new ErrorResult("The candidate not exists") ;
+	}
+	
 }
