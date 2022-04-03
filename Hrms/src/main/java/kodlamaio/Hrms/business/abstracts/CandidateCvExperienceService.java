@@ -9,9 +9,9 @@ import kodlamaio.Hrms.entities.concretes.CandidateCvExperience;
 public interface CandidateCvExperienceService {
 	DataResult<List<CandidateCvExperience>> getAll();
 	DataResult<CandidateCvExperience> getById(int id);
-	Result add(CandidateCvExperience candidateCv);
-	Result update(CandidateCvExperience candidateCv);
-	Result delete(CandidateCvExperience candidateCv);
+	Result add(CandidateCvExperience candidateCvExperience);
+	Result update(CandidateCvExperience candidateCvExperience);
+	Result delete(CandidateCvExperience candidateCvExperience);
 	DataResult<List<CandidateCvExperience>> getByCandidateCvId(int candidateCvId);
 	DataResult<List<CandidateCvExperience>> getByCandidateCvIdOrderByQuitDateDesc(int candidateCvId);
 }
