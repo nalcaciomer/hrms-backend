@@ -25,7 +25,7 @@ import lombok.NoArgsConstructor;
 @Table(name = "candidate_cvs")
 @AllArgsConstructor
 @NoArgsConstructor
-@JsonIgnoreProperties({"hibernateLazyInitializer","handler","candidateCvEducations", "candidateCvExperiences", "candidateCvLanguages", "candidateCvSkills"})
+@JsonIgnoreProperties({"hibernateLazyInitializer","handler","candidateCvEducations", "candidateCvExperiences", "candidateCvLanguages", "candidateCvSkills", "candidateCvWebsites"})
 public class CandidateCv {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -53,4 +53,7 @@ public class CandidateCv {
 	
 	@OneToMany(mappedBy = "candidateCv")
 	private List<CandidateCvSkill> candidateCvSkills;
+	
+	@OneToMany(mappedBy = "candidateCv")
+	private List<CandidateCvWebsite> candidateCvWebsites;
 }

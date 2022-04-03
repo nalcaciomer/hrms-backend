@@ -1,16 +1,13 @@
 package kodlamaio.Hrms.entities.concretes;
 
-import java.util.List;
-
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.OneToMany;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
-
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -18,22 +15,23 @@ import lombok.NoArgsConstructor;
 
 @Data
 @Entity
-@Table(name = "websites")
+@Table(name = "candidate_cv_websites")
 @AllArgsConstructor
 @NoArgsConstructor
-@JsonIgnoreProperties({"hibernateLazyInitializer","handler","candidateCvWebsites"})
-public class Website {
+public class CandidateCvWebsite {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "id")
 	private int id;
 	
-	@Column(name = "name")
-	private String name;
+	@Column(name = "address")
+	private String address;
 	
-	@Column(name = "domain_name")
-	private String domainName;
+	@ManyToOne()
+	@JoinColumn(name = "candidate_cv_id")
+	private CandidateCv candidateCv;
 	
-	@OneToMany(mappedBy = "website")
-	private List<CandidateCvWebsite> candidateCvWebsites;
+	@ManyToOne()
+	@JoinColumn(name = "website_id")
+	private Website website;
 }
