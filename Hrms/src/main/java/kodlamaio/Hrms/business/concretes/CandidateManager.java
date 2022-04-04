@@ -7,8 +7,7 @@ import org.springframework.stereotype.Service;
 
 import kodlamaio.Hrms.business.abstracts.CandidateService;
 import kodlamaio.Hrms.business.adapters.emailVerification.EmailVerificationService;
-import kodlamaio.Hrms.business.adapters.mernis.MernisCheckService;
-import kodlamaio.Hrms.business.adapters.mernis.PersonForMernisCheckService;
+import kodlamaio.Hrms.core.adapters.PersonService;
 import kodlamaio.Hrms.core.utilities.business.BusinessRules;
 import kodlamaio.Hrms.core.utilities.results.DataResult;
 import kodlamaio.Hrms.core.utilities.results.ErrorResult;
@@ -22,35 +21,33 @@ import kodlamaio.Hrms.entities.concretes.Candidate;
 public class CandidateManager implements CandidateService {
 
 	private CandidateDao candidateDao;
-	private MernisCheckService mernisCheckService;
+	private PersonService personService;
 	private EmailVerificationService emailVerificationService;
 
 	@Autowired
-	public CandidateManager(CandidateDao candidateDao, MernisCheckService mernisCheckService,
+	public CandidateManager(CandidateDao candidateDao, PersonService personService,
 			EmailVerificationService emailVerificationService) {
 		this.candidateDao = candidateDao;
-		this.mernisCheckService = mernisCheckService;
+		this.personService = personService;
 		this.emailVerificationService = emailVerificationService;
 	}
 
 	@Override
 	public DataResult<List<Candidate>> getAll() {
-		 return new SuccessDataResult<List<Candidate>>(this.candidateDao.findAll(), "Candidates listed");
+		return new SuccessDataResult<List<Candidate>>(this.candidateDao.findAll(), "Candidates listed");
 	}
-	
+
 	@Override
 	public DataResult<Candidate> getById(int id) {
 		return new SuccessDataResult<Candidate>(this.candidateDao.findById(id).get());
 	}
 
 	@Override
-	public Result add(Candidate candidate) {
+	public Result add(Candidate candidate){
 		final Result result = BusinessRules.run(
-				this.mernisCheckService.checkIfRealPerson(new PersonForMernisCheckService(
-						Long.parseLong(candidate.getNationalIdentity()), candidate.getFirstName(),
-						candidate.getLastName(), candidate.getDateOfBirth().getYear())),
-				isEmailExists(candidate.getEmail()), 
-				isNationalIdentityExists(candidate.getNationalIdentity()), 
+				this.personService.checkIfRealPerson(candidate.getFirstName(), candidate.getLastName(),
+						candidate.getDateOfBirth().getYear(), Long.parseLong(candidate.getNationalIdentity())),
+				isEmailExists(candidate.getEmail()), isNationalIdentityExists(candidate.getNationalIdentity()),
 				this.emailVerificationService.verify(candidate.getEmail()));
 
 		if (!result.isSuccess()) {
@@ -60,12 +57,12 @@ public class CandidateManager implements CandidateService {
 		this.candidateDao.save(candidate);
 		return new SuccessResult("Candidate added");
 	}
-	
+
 	@Override
 	public Result update(Candidate candidate) {
 		final Result result = BusinessRules.run(isExistsById(candidate.getId()));
-		
-		if(!result.isSuccess()) {
+
+		if (!result.isSuccess()) {
 			return result;
 		}
 
@@ -90,7 +87,8 @@ public class CandidateManager implements CandidateService {
 	}
 
 	private Result isNationalIdentityExists(String nationalIdentity) {
-		return this.candidateDao.existsCandidateByNationalIdentity(nationalIdentity) ? new ErrorResult("National identity is exists!")
+		return this.candidateDao.existsCandidateByNationalIdentity(nationalIdentity)
+				? new ErrorResult("National identity is exists!")
 				: new SuccessResult();
 	}
 
@@ -98,10 +96,9 @@ public class CandidateManager implements CandidateService {
 		return this.candidateDao.existsCandidateByEmail(email) ? new ErrorResult("Email is exists!")
 				: new SuccessResult();
 	}
-	
+
 	private Result isExistsById(int id) {
-		return this.candidateDao.existsById(id) ? new SuccessResult()
-				: new ErrorResult("The candidate not exists") ;
+		return this.candidateDao.existsById(id) ? new SuccessResult() : new ErrorResult("The candidate not exists");
 	}
-	
+
 }
