@@ -9,6 +9,9 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
@@ -28,9 +31,15 @@ public class Website {
 	@Column(name = "id")
 	private int id;
 	
+	@NotNull
+	@NotBlank
+	@Size(max = 50)
 	@Column(name = "name")
 	private String name;
 	
+	@NotNull
+	@NotBlank
+	@Size(max = 254)
 	@Column(name = "domain_name")
 	private String domainName;
 	

@@ -2,6 +2,8 @@ package kodlamaio.Hrms.api;
 
 import java.util.List;
 
+import javax.validation.Valid;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -37,12 +39,12 @@ public class CandidateCvExperiencesController {
 	}
 	
 	@PostMapping(value = "/add")
-	public Result add(@RequestBody CandidateCvExperience candidateCvExperience) {
+	public Result add(@Valid @RequestBody CandidateCvExperience candidateCvExperience) {
 		return this.candidateCvExperienceService.add(candidateCvExperience);
 	}
 	
 	@PostMapping(value = "/update")
-	public Result update(@RequestBody CandidateCvExperience candidateCvExperience) {
+	public Result update(@Valid @RequestBody CandidateCvExperience candidateCvExperience) {
 		return this.candidateCvExperienceService.update(candidateCvExperience);
 	}
 	

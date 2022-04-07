@@ -2,6 +2,8 @@ package kodlamaio.Hrms.api;
 
 import java.util.List;
 
+import javax.validation.Valid;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -52,12 +54,12 @@ public class WebsitesController {
 	}
 	
 	@PostMapping(value = "/add")
-	public Result add(@RequestBody Website website) {
+	public Result add(@Valid @RequestBody Website website) {
 		return this.websiteService.add(website);
 	}
 	
 	@PostMapping(value = "/update")
-	public Result update(@RequestBody Website website) {
+	public Result update(@Valid @RequestBody Website website) {
 		return this.websiteService.update(website);
 	}
 	

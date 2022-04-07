@@ -2,6 +2,8 @@ package kodlamaio.Hrms.api;
 
 import java.util.List;
 
+import javax.validation.Valid;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -37,8 +39,18 @@ public class JobAdvertisementsController {
 	}
 	
 	@PostMapping(value = "/add")
-	public Result add(@RequestBody JobAdvertisement jobAdvertisement) {
+	public Result add(@Valid @RequestBody JobAdvertisement jobAdvertisement) {
 		return this.jobAdvertisementService.add(jobAdvertisement);
+	}
+	
+	@PostMapping(value = "/update")
+	public Result update(@Valid @RequestBody JobAdvertisement jobAdvertisement) {
+		return this.jobAdvertisementService.update(jobAdvertisement);
+	}
+	
+	@PostMapping(value = "/delete")
+	public Result delete(@RequestBody JobAdvertisement jobAdvertisement) {
+		return this.jobAdvertisementService.delete(jobAdvertisement);
 	}
 	
 	@GetMapping(value = "/getallbyisactivetrue")

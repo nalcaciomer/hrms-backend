@@ -11,6 +11,8 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.PastOrPresent;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -27,13 +29,16 @@ public class EmployeeVerification {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int id;
 	
-	@Column(name = "created_at")
+	@PastOrPresent
+	@Column(name = "created_at", columnDefinition = "Date default " + "CURRENT_TIMESTAMP")
 	private final LocalDateTime createdAt = LocalDateTime.now();
 	
+	@NotNull
 	@ManyToOne()
 	@JoinColumn(name = "employee_id")
     private Employee employee;
 	
+	@NotNull
 	@OneToOne()
 	@JoinColumn(name = "employer_id")
     private Employer employer;

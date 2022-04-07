@@ -13,6 +13,9 @@ import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.PastOrPresent;
+import javax.validation.constraints.Size;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
@@ -32,12 +35,15 @@ public class CandidateCv {
 	@Column(name = "id")
 	private int id;
 	
+	@Size(max = 300)
 	@Column(name = "cover_letter")
 	private String coverLetter;
 	
-	@Column(name = "created_at")
+	@PastOrPresent
+	@Column(name = "created_at", columnDefinition = "Date default " + "CURRENT_TIMESTAMP")
 	private final LocalDateTime createdAt = LocalDateTime.now();
 	
+	@NotNull
 	@OneToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "candidate_id", referencedColumnName = "user_id")
 	private Candidate candidate;

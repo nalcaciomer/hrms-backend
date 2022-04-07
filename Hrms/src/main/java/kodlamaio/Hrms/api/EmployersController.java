@@ -2,6 +2,8 @@ package kodlamaio.Hrms.api;
 
 import java.util.List;
 
+import javax.validation.Valid;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -37,12 +39,12 @@ public class EmployersController {
 	}
 	
 	@PostMapping(value = "/add")
-	public Result add(@RequestBody Employer employer) {
+	public Result add(@Valid @RequestBody Employer employer) {
 		return this.employerService.add(employer);
 	}
 
 	@PostMapping(value = "/update")
-	public Result update(@RequestBody Employer employer) {
+	public Result update(@Valid @RequestBody Employer employer) {
 		return this.employerService.update(employer);
 	}
 	
