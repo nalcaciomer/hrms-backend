@@ -21,6 +21,7 @@ Distributed under the MIT License. See `LICENSE` for more information.
 ## Contact
 
 Ömer NALÇACI - nalcaciomer@outlook.com
+
 Project Link: [hrms-backend](https://github.com/nalcaciomer/hrms-backend)
 
 ## Acknowledgements
