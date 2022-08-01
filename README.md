@@ -22,7 +22,7 @@ Distributed under the MIT License. See `LICENSE` for more information.
 
 Ömer NALÇACI - nalcaciomer@outlook.com
 
-Project Link: [hrms-backend](https://github.com/nalcaciomer/hrms-backend)
+Project Link: [https://github.com/nalcaciomer/hrms-backend](https://github.com/nalcaciomer/hrms-backend)
 
 ## Acknowledgements
 
